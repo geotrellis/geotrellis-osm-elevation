@@ -1,4 +1,4 @@
-# OSME project 
+# I am doing SOMETHING
 #### To run viewer
 
 ```console
