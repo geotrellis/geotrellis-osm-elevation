@@ -1,3 +1,5 @@
+# Geotrellis OSM Elevation project
+
 #### To run viewer
 
 ```console
