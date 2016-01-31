@@ -1,5 +1,9 @@
 # Geotrellis OSM Elevation project
 
+## Background
+
+The OSM Elevation project integrates [OpenStreetMap](https://www.openstreetmap.org) data with Geotrellis to color roads with useful elevation data.
+
 This project will be used to find elevation data for roads in Open Street Map. We are researching ways to do this including vector tiles, and using GeoWave/GeoMesa.
 
 #### To run viewer
