@@ -1,5 +1,7 @@
 # Geotrellis OSM Elevation project
 
+This project will be used to find elevation data for roads in Open Street Map.
+
 #### To run viewer
 
 ```console
