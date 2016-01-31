@@ -27,6 +27,7 @@ Choose the number corresponding to YieldIngest or LandsatIngest.
 > ./sbt
 ```
 
+
 In SBT console,
 ```console
 > project server
