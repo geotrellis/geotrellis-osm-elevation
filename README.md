@@ -1,6 +1,6 @@
 # Geotrellis OSM Elevation project
 
-This project will be used to find elevation data for roads in Open Street Map.
+This project will be used to find elevation data for roads in Open Street Map. We are researching ways to do this including vector tiles, and using GeoWave/GeoMesa.
 
 #### To run viewer
 
