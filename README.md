@@ -1,5 +1,7 @@
 # Geotrellis OSM Elevation project
 
+[![Join the chat at https://gitter.im/geotrellis/geotrellis-osm-elevation](https://badges.gitter.im/geotrellis/geotrellis-osm-elevation.svg)](https://gitter.im/geotrellis/geotrellis-osm-elevation?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 ## Background
 
 The OSM Elevation project integrates [OpenStreetMap](https://www.openstreetmap.org) data with Geotrellis to color roads with useful elevation data.
