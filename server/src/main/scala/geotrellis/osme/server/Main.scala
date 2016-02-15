@@ -12,7 +12,7 @@ import geotrellis.spark.io.s3._
 import geotrellis.spark.io.accumulo._
 import geotrellis.spark.io.avro._
 import geotrellis.spark.io.avro.codecs._
-import geotrellis.spark.io.json._
+
 import geotrellis.spark.io.index._
 
 import org.apache.spark._
