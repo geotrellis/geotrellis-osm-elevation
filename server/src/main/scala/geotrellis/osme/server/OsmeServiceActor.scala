@@ -4,7 +4,9 @@ import akka.actor._
 import geotrellis.vector.Line
 import geotrellis.vector.io.json.{GeoJson => GJson}
 import geotrellis.vector.io.json.JsonFeatureCollection
+import geotrellis.vector.io.json.FeatureFormats.writeFeatureJson
 import geotrellis.vector.LineFeature
+import geotrellis.vector.Feature
 import geotrellis.vector.io.json.GeometryFormats.MultiLineFormat
 import org.apache.spark._
 import spray.http.HttpHeaders.RawHeader
@@ -22,9 +24,16 @@ class OsmeServiceActor(
 }
 
 
+trait ElevationUtility {
+ def applyElevation(line:Line) = {
+   val stubElevation: Array[Double]= new Map('elevation': new Array[Double](line.vertices.length).map(x => 5.0))
+   writeFeatureJson(LineFeature(line, stubElevation))
+ }
+
+}
 
 // trait partitioned off to enable better testing
-trait OsmeService extends HttpService {
+trait OsmeService extends HttpService with ElevationUtility {
 
   def cors: Directive0 = respondWithHeader(RawHeader("Access-Control-Allow-Origin", "*"))
 
@@ -33,11 +42,12 @@ trait OsmeService extends HttpService {
     path("getVectorData") {
       post {
         entity(as[String]) { geoJson =>
-          println(geoJson)
           val GJsonCollection:JsonFeatureCollection = GJson.parse[JsonFeatureCollection](geoJson)
           val lines: Vector[Line] = GJsonCollection.getAllLines()
+          val linesWithElevation= lines.map(line => applyElevation(line))
+          println(lines.toString())
           complete {
-            linesStr.size.toString()
+            linesWithElevation.toJson
           }
         }
       }
