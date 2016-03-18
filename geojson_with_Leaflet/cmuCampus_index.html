@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <!-- Bunch of Libraries. -->
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+
+    <!-- Libraries for header. -->
+    <link rel="stylesheet" href="assets/demo.css">
+    <link rel="stylesheet" href="assets/header-basic-light.css">
+    <link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'>
+
+</head>
+
+<body>
+
+    <header class="header-basic-light">
+        <div class="header-limiter">
+            <h1><a href="#">CMU <span>university center</span></a></h1>
+        </div>
+    </header>
+
+    <!-- Map -->
+    <div id="map" style="width: 600px; height: 600px; position: relative; margin-left: auto ; margin-right: auto ;"></div>
+    <!-- Distance between points. -->
+    <pre id="distance" class="ui-distance">Click to place a marker</pre>
+
+    <!-- Leaflet apis -->
+    <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+    <!-- Mapbox apis -->
+    <script src='https://api.mapbox.com/mapbox.js/v2.3.0/mapbox.js'></script>
+
+    <!-- Be sure to add feature dataset here. -->
+    <script src="cmu_sample_geojson.js" type="text/javascript"></script>
+
+    <!-- All the work is done here. -->
+    <script src="features.js" type="text/javascript"></script>
+
+</body>
+</html>
+
