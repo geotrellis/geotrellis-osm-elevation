@@ -1,55 +1,50 @@
 package geotrellis.osme.server
 
 import akka.actor._
-import geotrellis.vector.Line
-import geotrellis.vector.io.json.{GeoJson => GJson}
-import geotrellis.vector.io.json.JsonFeatureCollection
-import geotrellis.vector.io.json.FeatureFormats.writeFeatureJson
-import geotrellis.vector.LineFeature
-import geotrellis.vector.Feature
-import geotrellis.vector.io.json.GeometryFormats.MultiLineFormat
+import geotrellis.vector._
+import geotrellis.vector.io._
+import geotrellis.vector.io.json._
 import org.apache.spark._
 import spray.http.HttpHeaders.RawHeader
 import spray.routing._
-import spray.json.JsString
-
+import spray.json._
+import spray.httpx.SprayJsonSupport._
 
 class OsmeServiceActor(
   sc: SparkContext
 ) extends Actor with OsmeService{
-
   def actorRefFactory = context
   def receive = runRoute(root)
-
-}
-
-
-trait ElevationUtility {
- def applyElevation(line:Line) = {
-   val stubElevation: Array[Double]= new Map('elevation': new Array[Double](line.vertices.length).map(x => 5.0))
-   writeFeatureJson(LineFeature(line, stubElevation))
- }
-
 }
 
 // trait partitioned off to enable better testing
-trait OsmeService extends HttpService with ElevationUtility {
+trait OsmeService extends HttpService {
+  import Formats._
 
   def cors: Directive0 = respondWithHeader(RawHeader("Access-Control-Allow-Origin", "*"))
-
 
   def root =
     path("getVectorData") {
       post {
-        entity(as[String]) { geoJson =>
-          val GJsonCollection:JsonFeatureCollection = GJson.parse[JsonFeatureCollection](geoJson)
-          val lines: Vector[Line] = GJsonCollection.getAllLines()
-          val linesWithElevation= lines.map(line => applyElevation(line))
-          println(lines.toString())
+        entity(as[Polygon]) { queryPolygon =>
           complete {
-            linesWithElevation.toJson
+            // we can for and return Features and geometries because we import spray.httpx.SprayJsonSupport._
+            // and import JsonFormat[_] for the required types from geotrellis.vector.io._
+            OsmeService.riverFeatures.filter{ feature =>
+              feature.geom.intersects(queryPolygon)
+            }
           }
         }
       }
     }
+}
+
+object OsmeService {
+  import Formats._
+
+  lazy val riverFeatures: Vector[LineFeature[Stats]] =
+    Resource.string("/rivers-west.json")
+      .parseJson
+      .convertTo[JsonFeatureCollection]
+      .getAllLineFeatures[Stats]
 }
