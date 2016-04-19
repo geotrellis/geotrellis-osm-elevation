@@ -1,14 +1,16 @@
 package geotrellis.osme.ingest
 
 import geotrellis.raster._
+import geotrellis.raster.histogram._
 import geotrellis.spark._
 import geotrellis.spark.io._
 import geotrellis.spark.io.s3._
 import geotrellis.vector._
-import geotrellis.spark.utils.SparkUtils
+import geotrellis.spark.util.SparkUtils
 import org.apache.spark.SparkConf
+import org.apache.spark.rdd.RDD
 
-object IngestElevation {
+object GenerateHistogram {
     def main(args: Array[String]): Unit = {
         implicit val sc = SparkUtils.createSparkContext("GeoTrellis OSM IngestElevation", new SparkConf(true))
         try {
@@ -17,9 +19,7 @@ object IngestElevation {
                 reader
                     .query[SpatialKey, Tile, TileLayerMetadata[SpatialKey]](LayerId("NED", 10))
                     .result
-            val histogram = rdd.map { case (_, (_, tile)) => tile.histogram }
-                                .reduce { _ merge _ }
-                                .quantileBreaks(15)
+            val histogram = rdd.map { case (_, tile) => tile.histogramDouble }.reduce { _ merge _ }.quantileBreaks(15)
         } finally {
             sc.stop()
         }  
