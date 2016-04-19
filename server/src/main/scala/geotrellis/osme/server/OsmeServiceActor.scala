@@ -1,31 +1,50 @@
 package geotrellis.osme.server
 
-import org.apache.spark._
-
 import akka.actor._
-import akka.io.IO
-import spray.can.Http
-import spray.routing._
-import spray.routing.directives.CachingDirectives
-import spray.http.MediaTypes
+import geotrellis.vector._
+import geotrellis.vector.io._
+import geotrellis.vector.io.json._
+import org.apache.spark._
 import spray.http.HttpHeaders.RawHeader
-import spray.httpx.SprayJsonSupport._
+import spray.routing._
 import spray.json._
-
-import com.typesafe.config.ConfigFactory
-
-import scala.concurrent._
+import spray.httpx.SprayJsonSupport._
 
 class OsmeServiceActor(
   sc: SparkContext
-) extends Actor with HttpService {
-  import scala.concurrent.ExecutionContext.Implicits.global
+) extends Actor with OsmeService{
+  def actorRefFactory = context
+  def receive = runRoute(root)
+}
+
+// trait partitioned off to enable better testing
+trait OsmeService extends HttpService {
+  import Formats._
 
   def cors: Directive0 = respondWithHeader(RawHeader("Access-Control-Allow-Origin", "*"))
 
-  def actorRefFactory = context
-  def receive = runRoute(root)
-
   def root =
-    path("ping") { complete { "pong\n" } }
+    path("getVectorData") {
+      post {
+        entity(as[Polygon]) { queryPolygon =>
+          complete {
+            // we can for and return Features and geometries because we import spray.httpx.SprayJsonSupport._
+            // and import JsonFormat[_] for the required types from geotrellis.vector.io._
+            OsmeService.riverFeatures.filter{ feature =>
+              feature.geom.intersects(queryPolygon)
+            }
+          }
+        }
+      }
+    }
+}
+
+object OsmeService {
+  import Formats._
+
+  lazy val riverFeatures: Vector[LineFeature[Stats]] =
+    Resource.string("/rivers-west.json")
+      .parseJson
+      .convertTo[JsonFeatureCollection]
+      .getAllLineFeatures[Stats]
 }

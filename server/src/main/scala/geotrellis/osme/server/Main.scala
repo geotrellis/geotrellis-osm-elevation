@@ -8,17 +8,13 @@ import geotrellis.raster.resample._
 import geotrellis.spark._
 import geotrellis.spark.io._
 import geotrellis.spark.io.file._
-import geotrellis.spark.io.s3._
-import geotrellis.spark.io.accumulo._
 import geotrellis.spark.io.avro._
 import geotrellis.spark.io.avro.codecs._
-import geotrellis.spark.io.json._
+
 import geotrellis.spark.io.index._
 
 import org.apache.spark._
 import org.apache.avro.Schema
-
-import org.apache.accumulo.core.client.security.tokens._
 
 import com.github.nscala_time.time.Imports._
 import akka.actor._
