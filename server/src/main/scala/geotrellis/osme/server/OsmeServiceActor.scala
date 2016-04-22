@@ -24,14 +24,16 @@ trait OsmeService extends HttpService {
   def cors: Directive0 = respondWithHeader(RawHeader("Access-Control-Allow-Origin", "*"))
 
   def root =
-    path("getVectorData") {
-      post {
-        entity(as[Polygon]) { queryPolygon =>
-          complete {
-            // we can for and return Features and geometries because we import spray.httpx.SprayJsonSupport._
-            // and import JsonFormat[_] for the required types from geotrellis.vector.io._
-            OsmeService.riverFeatures.filter{ feature =>
-              feature.geom.intersects(queryPolygon)
+    cors{
+      path("getVectorData") {
+        post {
+          entity(as[Polygon]) { queryPolygon =>
+            complete {
+              // we can for and return Features and geometries because we import spray.httpx.SprayJsonSupport._
+              // and import JsonFormat[_] for the required types from geotrellis.vector.io._
+              OsmeService.riverFeatures.filter{ feature =>
+                feature.geom.intersects(queryPolygon)
+              }
             }
           }
         }

@@ -156,7 +156,39 @@ var actions = {
           error => {}
         );
       };
-  }
+  },
+  
+  queryRoadElevation: function(serviceUrl, polygonJSON) {
+    return dispatch => {
+      console.log("polygonJSON", polygonJSON);
+      
+      return fetch(serviceUrl, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(polygonJSON)
+      })
+      .then(
+        response => {
+          response.json().then( lines => {
+            console.log(lines);
+            // .showLayer(layerUrl + "&breaks=" + breaks.join(","), layerId)
+            dispatch(actions.renderElevation(lines));
+          });
+        },
+        error => {}           
+      )
+    }
+  },
+  
+  renderElevation: function(lines){
+      return {
+        type: 'SHOW_ELEVATIONS',
+        elevation: lines
+      }
+  }  
 };
 
 module.exports = actions;
