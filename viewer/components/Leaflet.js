@@ -17,8 +17,6 @@ var Leaflet = React.createClass({
       
       this.props.queryPolygon(serviceURL, polygonJSON);
       
-      
-      
       console.log("onCreate");
   },
   _mounted: function() {
