@@ -9,14 +9,14 @@ var Leaflet = React.createClass({
       console.log("onEditPath");
   },
   _onCreate: function(e) {
-      
+
       // get geojson from e.
       var polygonJSON = e.layer.toGeoJSON();
-      
+
       var serviceURL = "http://localhost:8088/getVectorData";
-      
-      this.props.queryPolygon(serviceURL, polygonJSON);
-      
+
+      this.props.queryPolygon(serviceURL, polygonJSON.geometry);
+
       console.log("onCreate");
   },
   _mounted: function() {
@@ -24,8 +24,8 @@ var Leaflet = React.createClass({
   },
   _onDeleted: function() {
       console.log("deleted");
-  },  
-  
+  },
+
   render: function() {
     const style = {
       minHeight: "800px", width: "100%"
@@ -33,7 +33,7 @@ var Leaflet = React.createClass({
     let tileLayers = _.map(this.props.url, u => {
       return <TileLayer url={u} />;
     });
-    
+
     return (
       <Map center ={[37.062,-121.530]} zoom={8} style={style} bounds={this.props.bounds}>
         <TileLayer
@@ -50,7 +50,7 @@ var Leaflet = React.createClass({
                 rectangle: false
               }}
             />
-        </FeatureGroup>        
+        </FeatureGroup>
         {tileLayers}
       </Map>
     );
