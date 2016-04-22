@@ -18,14 +18,13 @@ class OsmeServiceActor(
 }
 
 // trait partitioned off to enable better testing
-trait OsmeService extends HttpService {
+trait OsmeService extends HttpService with CorsSupport {
   import Formats._
-
-  def cors: Directive0 = respondWithHeader(RawHeader("Access-Control-Allow-Origin", "*"))
 
   def root =
     cors{
       path("getVectorData") {
+        options { complete{spray.http.StatusCodes.OK} } ~
         post {
           entity(as[Polygon]) { queryPolygon =>
             complete {
@@ -39,6 +38,7 @@ trait OsmeService extends HttpService {
         }
       }
     }
+
 }
 
 object OsmeService {
