@@ -24,7 +24,6 @@ trait OsmeService extends HttpService {
   def cors: Directive0 = respondWithHeader(RawHeader("Access-Control-Allow-Origin", "*"))
 
   def root =
-    cors{
       path("getVectorData") {
         post {
           entity(as[Polygon]) { queryPolygon =>
@@ -38,7 +37,6 @@ trait OsmeService extends HttpService {
           }
         }
       }
-    }
 }
 
 object OsmeService {

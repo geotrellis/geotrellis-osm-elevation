@@ -174,7 +174,6 @@ var actions = {
         response => {
           response.json().then( lines => {
             console.log(lines);
-            // .showLayer(layerUrl + "&breaks=" + breaks.join(","), layerId)
             dispatch(actions.renderElevation(lines));
           });
         },
