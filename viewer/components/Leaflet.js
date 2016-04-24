@@ -9,14 +9,13 @@ var Leaflet = React.createClass({
       console.log("onEditPath");
   },
   _onCreate: function(e) {
-
-      // get geojson from e.
+        
+      var map = e.layer._map;
+      // get polygon geojson from e.
       var polygonJSON = e.layer.toGeoJSON();
-
       var serviceURL = "http://localhost:8088/getVectorData";
-
-      this.props.queryPolygon(serviceURL, polygonJSON.geometry);
-
+      this.props.queryPolygon(serviceURL, polygonJSON.geometry, map);
+                                          
       console.log("onCreate");
   },
   _mounted: function() {
@@ -56,5 +55,7 @@ var Leaflet = React.createClass({
     );
   }
 });
+
+
 
 module.exports = Leaflet;

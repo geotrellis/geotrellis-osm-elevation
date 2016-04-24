@@ -158,36 +158,38 @@ var actions = {
       };
   },
   
-  queryRoadElevation: function(serviceUrl, polygonJSON) {
+  queryRoadElevation: function(serviceUrl, polygonJSON, map) {
     return dispatch => {
-      console.log("polygonJSON", polygonJSON);
+      console.log("MAP", map);
       
       return fetch(serviceUrl, {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(polygonJSON)
+       },
+        body: JSON.stringify(polygonJSON),
       })
       .then(
-        response => {
-          response.json().then( lines => {
-            console.log(lines);
-            dispatch(actions.renderElevation(lines));
-          });
-        },
-        error => {}           
+         response => {
+           response.json().then( lines => {
+             //console.log(lines);
+             dispatch(actions.renderElevation(lines, map));
+           });
+         },
+         error => {}           
       )
     }
   },
-  
-  renderElevation: function(lines){
+  renderElevation: function(lines, map){
       return {
         type: 'SHOW_ELEVATIONS',
-        elevation: lines
+        elevation: lines,
+        theMap: map
       }
-  }  
+  }
 };
+
+
 
 module.exports = actions;
