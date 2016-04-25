@@ -3,9 +3,10 @@ package geotrellis.osme.core
 import com.vividsolutions.jts.geom.{LineString, MultiLineString}
 import geotrellis.raster.io.geotiff.SinglebandGeoTiff
 import geotrellis.vector.io.json.{GeoJson, JsonFeatureCollection}
+import geotrellis.vector.io.json.FeatureFormats.writeFeatureJson
 import geotrellis.vector.densify.DensifyMethods
 import geotrellis.vector.dissolve.DissolveMethods
-import geotrellis.vector.{MultiLine, MultiLineMultiLineUnionResult, Polygon, Line}
+import geotrellis.vector._
 import scala.io.Source
 
 
@@ -19,7 +20,6 @@ object Segments {
  }
 }
 
-
 object ElevationOverlay {
   /* Change to take polygon */
   def apply(): Int = {
@@ -31,7 +31,6 @@ object ElevationOverlay {
     val lines: Vector[Line] = gjCol.getAllLines()
     val multiLine = gjCol.getAllLines().toMultiLine
 
-    println(multiLine)
 
     /* TODO: Reproject if necessary */
     val rasterExtent = gt.rasterExtent
@@ -43,7 +42,22 @@ object ElevationOverlay {
     val dissolvedLines: MultiLine = densifiedLine.dissolve.asMultiLine.getOrElse(multiLine.jtsGeom)
 
     val numSegments = 5
-    val segments = dissolvedLines.lines.map(line => Segments(line, numSegments))
+    val segments = dissolvedLines.lines.map(line => Segments(line, numSegments)).flatten
+
+    val centers = segments.map(line => line.centroid)
+
+    val segmentsJSON = segments.map { segment =>
+       val center = segment.centroid match {
+         case PointResult(p) => p
+         case NoResult => throw new Exception("No result found in PointOrNoResult")
+       }
+       val (col, row) = rasterExtent.mapToGrid(center)
+       val elevation = gt.tile.getDouble(col, row)
+       writeFeatureJson(LineFeature(segment, elevation))
+     }
+
+
+
 
 
 
