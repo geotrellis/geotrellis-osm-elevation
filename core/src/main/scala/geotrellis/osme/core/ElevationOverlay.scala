@@ -56,9 +56,15 @@ object ElevationOverlay {
        }
        val (col, row) = rasterExtent.mapToGrid(center)
        val elevation = gt.tile.getDouble(col, row)
-       writeFeatureJson(LineFeature(segment, elevation)).toJson
+       val meanvMap: Map[String, Double] = Map("MEANV" -> 2.0)
+       writeFeatureJson(LineFeature(segment, meanvMap.toJson)).toJson
      }
 
+    val file = new File("geocolor_test.json")
+    val bw = new BufferedWriter(new FileWriter(file))
+    bw.write(segmentsJSON)
+    bw.close()
+    //seqGeometryToGeometryCollection(segmentsJ)
     return segmentsJSON.toList
 
 
