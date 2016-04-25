@@ -1,11 +1,23 @@
 package geotrellis.osme.core
 
+import com.vividsolutions.jts.geom.{LineString, MultiLineString}
 import geotrellis.raster.io.geotiff.SinglebandGeoTiff
 import geotrellis.vector.io.json.{GeoJson, JsonFeatureCollection}
 import geotrellis.vector.densify.DensifyMethods
 import geotrellis.vector.dissolve.DissolveMethods
 import geotrellis.vector.{MultiLine, MultiLineMultiLineUnionResult, Polygon, Line}
 import scala.io.Source
+
+
+/* TODO: Add this to the geotrellis library as a property of Line maybe */
+object Segments {
+
+ def apply(line: Line, numSegments: Int): Traversable[Line] = {
+   val vertexCountPerLine = line.vertexCount / numSegments
+   val partitions = line.points.sliding(vertexCountPerLine)
+   partitions.map(points => Line(points)).toList
+ }
+}
 
 
 object ElevationOverlay {
@@ -27,13 +39,18 @@ object ElevationOverlay {
     /* tolerance parameter for densify */
     val densifyParam = rasterExtent.cellwidth
 
-    val densifiedMultiline = multiLine.densify(densifyParam)
-    val dissolveMulitiline = densifiedMultiline.dissolve
+    val densifiedLine = multiLine.densify(densifyParam)
+    val dissolvedLines: MultiLine = densifiedLine.dissolve.asMultiLine.getOrElse(multiLine.jtsGeom)
 
-    println(densifiedMultiline)
-    println(dissolveMulitiline)
+    val numSegments = 5
+    val segments = dissolvedLines.lines.map(line => Segments(line, numSegments))
+
+
+
+
 
     return 42;
+
 
   }
 }
