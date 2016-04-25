@@ -3,7 +3,10 @@ package geotrellis.osme.core
 import com.vividsolutions.jts.geom.{LineString, MultiLineString}
 import geotrellis.raster.io.geotiff.SinglebandGeoTiff
 import geotrellis.vector.io.json.{GeoJson, JsonFeatureCollection}
+import spray.json._
+import DefaultJsonProtocol._
 import geotrellis.vector.io.json.FeatureFormats.writeFeatureJson
+import geotrellis.vector.io.json.GeometryFormats._
 import geotrellis.vector.densify.DensifyMethods
 import geotrellis.vector.dissolve.DissolveMethods
 import geotrellis.vector._
@@ -22,7 +25,7 @@ object Segments {
 
 object ElevationOverlay {
   /* Change to take polygon */
-  def apply(): Int = {
+  def apply(): List[JsValue] = {
     val gt = SinglebandGeoTiff("data/imgn36w100_13_3_3.tif");
     val geojson = Source.fromFile("data/imgn36w100vector.geojson").getLines.mkString
 
@@ -53,17 +56,10 @@ object ElevationOverlay {
        }
        val (col, row) = rasterExtent.mapToGrid(center)
        val elevation = gt.tile.getDouble(col, row)
-       writeFeatureJson(LineFeature(segment, elevation))
+       writeFeatureJson(LineFeature(segment, elevation)).toJson
      }
 
-
-
-
-
-
-
-
-    return 42;
+    return segmentsJSON.toList
 
 
   }
