@@ -28,7 +28,7 @@ object ElevationOverlay {
     val densifyParam = rasterExtent.cellwidth
 
     val densifiedMultiline = multiLine.densify(densifyParam)
-    val dissolveMulitiline = densifiedMultiline.dissolve.asMultiLine
+    val dissolveMulitiline = densifiedMultiline.dissolve
 
     println(densifiedMultiline)
     println(dissolveMulitiline)
