@@ -21,7 +21,8 @@ class OsmeServiceActor(
 trait OsmeService extends HttpService with CorsSupport {
   import Formats._
 
-  def root =
+  def root = 
+    cors{
       path("getVectorData") {
         options { complete{spray.http.StatusCodes.OK} } ~
         post {
@@ -37,7 +38,6 @@ trait OsmeService extends HttpService with CorsSupport {
         }
       }
     }
-
 }
 
 object OsmeService {
