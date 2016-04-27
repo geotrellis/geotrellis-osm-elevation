@@ -19,6 +19,7 @@
     "express": "^4.13.3",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.8.5",
+    "geocolor": "^0.0.16",
     "imports-loader": "^0.6.5",
     "isomorphic-fetch": "^2.2.0",
     "jquery": "^2.2.0",
