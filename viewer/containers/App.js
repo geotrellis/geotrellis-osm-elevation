@@ -5,6 +5,7 @@ import * as actions from '../redux/actions';
 import Leaflet from '../components/Leaflet';
 import Catalog from '../components/Catalog';
 import Panels from '../components/Panels';
+import MapViews from '../components/MapViews';
 import _ from 'lodash';
 
 import "bootstrap-webpack";
@@ -16,12 +17,9 @@ var App = React.createClass({
     <div className="row">
         <div className="col-md-9">
           <Leaflet
+            queryPolygon={this.props.actions.queryRoadElevation}
             url={this.props.map.url}
-            bounds={this.props.map.bounds}
-            maxState={this.props.map.maxState}
-            maxAverageState={this.props.map.maxAverageState}
-            stateAverage={this.props.map.stateAverage}
-            stateDiffAverage={this.props.map.stateDiffAverage} />
+            bounds={this.props.map.bounds} />
         </div>
 
         <div className="col-md-3" >
@@ -29,26 +27,41 @@ var App = React.createClass({
             <Catalog
               defaultUrl={this.props.rootUrl}
               bounds={this.props.map.bounds}
-              onSubmit={url => this.props.actions.fetchCatalog(url)} />
-            <Panels
+              onSubmit={url => this.props.actions.fetchCatalog(url)} />        
+              
+            <MapViews
               rootUrl={this.props.rootUrl}
-              layers={this.props.catalog.layers}
-              activeLayerId={this.props.map.activeLayerId}
+              layers={this.props.catalog.layers }
               showExtent={this.props.actions.showExtent}
               showLayer={this.props.actions.showLayer}
-              showLayerWithBreaks={this.props.actions.showLayerWithBreaks}
-              showMaxState={this.props.actions.showMaxState}
-              hideMaxState={this.props.actions.hideMaxState}
-              showMaxAverageState={this.props.actions.showMaxAverageState}
-              hideMaxAverageState={this.props.actions.hideMaxAverageState}
-              showStateAverage={this.props.actions.showStateAverage}
-              showStateDiffAverage={this.props.actions.showStateDiffAverage} />
+              showLayerWithBreaks={this.props.actions.showLayerWithBreaks} />
           </div>
         </div>
       </div>
     );
   }
 });
+
+/*
+      maxState={this.props.map.maxState}
+      maxAverageState={this.props.map.maxAverageState}
+      stateAverage={this.props.map.stateAverage}
+      stateDiffAverage={this.props.map.stateDiffAverage}
+
+      <Panels
+      rootUrl={this.props.rootUrl}
+      layers={this.props.catalog.layers}
+      activeLayerId={this.props.map.activeLayerId}
+      showExtent={this.props.actions.showExtent}
+      showLayer={this.props.actions.showLayer}
+      showLayerWithBreaks={this.props.actions.showLayerWithBreaks}
+      showMaxState={this.props.actions.showMaxState}
+      hideMaxState={this.props.actions.hideMaxState}
+      showMaxAverageState={this.props.actions.showMaxAverageState}
+      hideMaxAverageState={this.props.actions.hideMaxAverageState}
+      showStateAverage={this.props.actions.showStateAverage}
+      showStateDiffAverage={this.props.actions.showStateDiffAverage} />
+*/
 
 var mapStateToProps = function (state) {
   return state;

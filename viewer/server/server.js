@@ -15,11 +15,18 @@ app.use(webpackHotMiddleware(compiler));
 app.use(express.static('./dist'));
 
 app.get("/", function(req, res) {
+  console.log("index.html");
   res.sendFile(path.resolve('client/index.html'));
 });
 
 app.get("/favicon.ico", function(req, res) {
+  console.log("icon");
   res.sendFile(path.resolve('client/favicon.ico'));
+});
+
+app.get("/legend.css", function(req, res) {
+  console.log("legend");
+  res.sendFile(path.resolve('stylesheets/legend.css'));
 });
 
 app.listen(port, function(error) {
