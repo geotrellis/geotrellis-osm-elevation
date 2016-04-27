@@ -1,5 +1,5 @@
 import renderElevationData  from '../utils/renderRoads';
-import geocolorJenksWrapper  from '../utils/renderRoads';
+import setLegend from '../utils/renderLegend';
 
 var reducer = function (state, action) {
   switch (action.type) {
@@ -57,22 +57,14 @@ var reducer = function (state, action) {
     }
     case 'SHOW_ELEVATIONS': {
       console.log("SHOW_ELEVATIONS");
-
-      // Modify elevation data to include other parameters in features array.
-      function addPolylineParams(element, index, array){
-        array[index].properties["fill"] = 0;
-        array[index].properties["stroke"] = '#FFFFFF';
-        array[index].properties["stroke-opacity"] = 1;
-        array[index].properties["stroke-width"] = 1;
-      }
-      
-      var roads = action.elevation;
-      roads.forEach(addPolylineParams);
       
       var map = action.theMap;
-      
-      renderElevationData(map, roads);
+      var roads = action.elevation;
             
+      var intervals = renderElevationData(map, roads);
+      
+      setLegend(intervals, map); 
+                  
       return _.merge({}, state, { map: { elevationData: roads } });
     }
     default:
