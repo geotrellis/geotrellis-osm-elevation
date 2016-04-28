@@ -28,7 +28,11 @@ lazy val commonSettings = Seq(
 lazy val root = Project("demo", file("."))
   .aggregate(ingest, server, core)
 
+lazy val vectorTile = Project("scala-vector-tile", file("scala-vector-tile"))
+  .settings(commonSettings: _*)
+
 lazy val core = Project("core", file("core"))
+  .dependsOn(vectorTile)  
   .settings(commonSettings: _*)
 
 lazy val ingest = Project("ingest", file("ingest"))
