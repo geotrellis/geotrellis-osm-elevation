@@ -1,3 +1,6 @@
+import renderElevationData  from '../utils/renderRoads';
+import setLegend from '../utils/renderLegend';
+
 var reducer = function (state, action) {
   switch (action.type) {
     case 'SHOW_LAYER':
@@ -51,6 +54,18 @@ var reducer = function (state, action) {
       console.log("SHOW_STATE_DIFF_AVERAGE");
       console.log(action.geojson);
       return _.merge({}, state, { map: { stateDiffAverage: action.geojson } });
+    }
+    case 'SHOW_ELEVATIONS': {
+      console.log("SHOW_ELEVATIONS");
+      
+      var map = action.theMap;
+      var roads = action.elevation;
+            
+      var intervals = renderElevationData(map, roads);
+      
+      setLegend(intervals, map); 
+                  
+      return _.merge({}, state, { map: { elevationData: roads } });
     }
     default:
       return state;

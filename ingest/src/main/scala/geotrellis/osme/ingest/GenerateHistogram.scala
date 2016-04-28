@@ -18,10 +18,10 @@ object GenerateHistogram {
             val reader = S3LayerReader("osm-elevation", "catalog")
             val rdd: RDD[(SpatialKey, Tile)] with Metadata[TileLayerMetadata[SpatialKey]] =
                 reader
-                    .query[SpatialKey, Tile, TileLayerMetadata[SpatialKey]](LayerId("NED", 10))
+                    .query[SpatialKey, Tile, TileLayerMetadata[SpatialKey]](LayerId("ned", 10))
                     .result
             val histogram = rdd.map { case (_, tile) => tile.histogramDouble }.reduce { _ merge _ }.quantileBreaks(15)
-            reader.attributeStore.write(LayerId("NED", 0), "histogram", histogram)
+            reader.attributeStore.write(LayerId("ned", 0), "histogram", histogram)
         } finally {
             sc.stop()
         }  
