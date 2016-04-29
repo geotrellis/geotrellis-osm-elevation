@@ -18,20 +18,21 @@ class OsmeServiceActor(
 }
 
 // trait partitioned off to enable better testing
-trait OsmeService extends HttpService {
+trait OsmeService extends HttpService with CorsSupport {
   import Formats._
 
-  def cors: Directive0 = respondWithHeader(RawHeader("Access-Control-Allow-Origin", "*"))
-
-  def root =
-    path("getVectorData") {
-      post {
-        entity(as[Polygon]) { queryPolygon =>
-          complete {
-            // we can for and return Features and geometries because we import spray.httpx.SprayJsonSupport._
-            // and import JsonFormat[_] for the required types from geotrellis.vector.io._
-            OsmeService.riverFeatures.filter{ feature =>
-              feature.geom.intersects(queryPolygon)
+  def root = 
+    cors{
+      path("getVectorData") {
+        options { complete{spray.http.StatusCodes.OK} } ~
+        post {
+          entity(as[Polygon]) { queryPolygon =>
+            complete {
+              // we can for and return Features and geometries because we import spray.httpx.SprayJsonSupport._
+              // and import JsonFormat[_] for the required types from geotrellis.vector.io._
+              OsmeService.riverFeatures.filter{ feature =>
+                feature.geom.intersects(queryPolygon)
+              }
             }
           }
         }
