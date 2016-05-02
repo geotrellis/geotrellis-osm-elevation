@@ -1,5 +1,4 @@
-# 1. function create_object_links() gets a bucket path and returns a list of 
-#    the link of each .img file
+# 1. function create_object_links() gets a bucket path and returns a list of the link of each .img file
 # 2. s3://azavea-datahub/emr/bootstrap.sh:  install python2.7: sudo yum install -y python27; 
 #                                           install gdal; 
 #                                           install gdal_retile.py: sudo yum install -y gdal-python.x86_64;
