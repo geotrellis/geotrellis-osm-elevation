@@ -22,7 +22,7 @@ class ElevationSpec extends FunSpec with Matchers {
     new {
       val geotiff = SinglebandGeoTiff("data/imgn36w100_13_3_3.tif")
       val multiLine = gjCol.getAllLines().toMultiLine
-      val elevationGeoJson = ElevationOverlay(geotiff, multiLine)
+      val elevationGeoJson = ElevationCalculation(geotiff, multiLine)
     }
 
   }

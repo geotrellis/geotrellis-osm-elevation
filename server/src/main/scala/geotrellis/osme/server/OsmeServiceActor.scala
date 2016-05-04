@@ -1,7 +1,7 @@
 package geotrellis.osme.server
 
 import akka.actor._
-import geotrellis.osme.core.DecomposePolygonTms
+import geotrellis.osme.core.{ElevationCalculation, DecomposePolygonTms}
 import geotrellis.proj4.{WebMercator, LatLng, Proj4Transform}
 import geotrellis.spark.SpatialKey
 import geotrellis.vector._
@@ -35,7 +35,7 @@ trait OsmeService extends HttpService with CorsSupport {
               // and import JsonFoArmat[_] for the required types from geotrellis.vector.io._
 
               val polygonFilter = queryPolygon.geom.reproject(LatLng, WebMercator).as[Polygon]
-              val spatialKeys: Option[Seq[SpatialKey]] = polygonFilter.map(polygon => DecomposePolygonTms(zoom, polygon))
+              val vectorWithElevation = polygonFilter.map(polygon => ElevationCalculation(zoom, polygon))
 
               OsmeService.riverFeatures.filter { feature =>
                 feature.geom.intersects(queryPolygon)

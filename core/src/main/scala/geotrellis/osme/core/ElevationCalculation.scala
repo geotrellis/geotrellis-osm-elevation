@@ -3,7 +3,10 @@ package geotrellis.osme.core
 import java.io.{BufferedWriter, FileWriter, File}
 
 import com.vividsolutions.jts.geom.{LineString, MultiLineString}
+import geotrellis.raster.io.geotiff
+import geotrellis.raster.{Tile, Raster}
 import geotrellis.raster.io.geotiff.SinglebandGeoTiff
+import geotrellis.spark.SpatialKey
 import geotrellis.vector.io.json.{GeoJson, JsonFeatureCollection}
 import scala.collection.immutable.Map
 import spray.json._
@@ -25,9 +28,12 @@ object Segments {
  }
 }
 
-object ElevationOverlay {
+
+
+class ElevationCalculation(vectorTileUrl: String, elevationBucket: String, elevationPrefix: String) {
   /* Change to take polygon */
-  def apply(geotiff: SinglebandGeoTiff, multiline: MultiLine): Traversable[Feature[Line, Map[String, Double]]] = {
+
+  def apply(raster: Raster[Tile], multiline: MultiLine): Seq[LineFeature[Stats]] = {
 
     /* TODO: Reproject if necessary */
     val rasterExtent = geotiff.rasterExtent
@@ -58,4 +64,17 @@ object ElevationOverlay {
 
 
   }
+
+}
+
+object ElevationCalculation {
+
+  def apply(zoom: Int, polygon: Polygon): Seq[LineFeature[Stats]] = {
+
+    val spatialKeys: Seq[SpatialKey] = DecomposePolygonTms(zoom, polygon)
+
+
+
+  }
+
 }
