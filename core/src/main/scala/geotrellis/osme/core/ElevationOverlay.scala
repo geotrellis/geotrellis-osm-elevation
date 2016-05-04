@@ -15,7 +15,7 @@ import geotrellis.vector.dissolve.DissolveMethods
 import geotrellis.vector._
 
 
-/* TODO: Add this to the geotrellis library as a property of Line maybe */
+/* TODO: Add this to the geotrellis library as a property of Line maybe? */
 object Segments {
 
  def apply(line: Line, numSegments: Int): Traversable[Line] = {
