@@ -17,20 +17,26 @@ import org.apache.spark.rdd._
 import java.net._
 import java.io.File
 
-class HttpSlippyTileReader[T](pathTemplate: String)(fromBytes: (SpatialKey, Array[Byte]) => T) extends SlippyTileReader[T] {
-    def getURL(template: String, z: Int, x: Int, y: Int) = 
-        template.replace("{z}", z.toString).replace("{x}", x.toString).replace("{y}", y.toString)
-    def getByteArray(url: String) = {
-      val inStream = new URL(url).openStream()
-      try {
-        toByteArray(inStream)
-      } finally {
-        inStream.close()
-      }
+class HttpSlippyTileReader[T](fromBytes: (SpatialKey, Array[Byte]) => T) extends SlippyTileReader[T] {
+
+  val template = "http://tile.openstreetmap.us/vectiles-highroad/{z}/{x}/{y}.mvt"
+
+  def getURL(template: String, z: Int, x: Int, y: Int) =
+      template.replace("{z}", z.toString).replace("{x}", x.toString).replace("{y}", y.toString)
+
+  def getByteArray(url: String) = {
+    val inStream = new URL(url).openStream()
+    try {
+      toByteArray(inStream)
+    } finally {
+      inStream.close()
     }
+  }
 
     def read(zoom: Int)(implicit sc: SparkContext): RDD[(SpatialKey, T)] = ???
-    def read(zoom: Int, key: SpatialKey): T = fromBytes(key, getByteArray(getURL(pathTemplate, zoom, key.col, key.row)))
+
+    def read(zoom: Int, key: SpatialKey): T = fromBytes(key, getByteArray(getURL(template, zoom, key.col, key.row)))
+
     override def read(zoom: Int, x: Int, y: Int): T =
         read(zoom, SpatialKey(x, y))
 }
