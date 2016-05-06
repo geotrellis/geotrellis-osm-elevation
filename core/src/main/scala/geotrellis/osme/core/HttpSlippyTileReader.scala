@@ -18,6 +18,7 @@ import java.net._
 import java.io.File
 
 class HttpSlippyTileReader[T](fromBytes: (SpatialKey, Array[Byte]) => T) extends SlippyTileReader[T] {
+
   val template = "http://tile.openstreetmap.us/vectiles-highroad/{z}/{x}/{y}.mvt"
 
   def getURL(template: String, z: Int, x: Int, y: Int) =

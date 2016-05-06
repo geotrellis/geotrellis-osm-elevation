@@ -77,7 +77,8 @@ object ElevationCalculation {
 
     val spatialKeys: Seq[SpatialKey] = DecomposePolygonTms(zoom, polygon)
     val valueReader = s3Reader.reader[SpatialKey, Tile](LayerId("ned", zoom))
-
+    val tiles: Seq[Tile] = spatialKeys.map(skey => valueReader(skey))
+    val vectorData = spatialKeys.map(skey => vectorTileReader.read(zoom, skey))
 
 
   }
