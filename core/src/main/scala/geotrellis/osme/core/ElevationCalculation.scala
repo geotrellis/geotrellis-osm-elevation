@@ -6,7 +6,8 @@ import com.vividsolutions.jts.geom.{LineString, MultiLineString}
 import geotrellis.raster.io.geotiff
 import geotrellis.raster.{Tile, Raster}
 import geotrellis.raster.io.geotiff.SinglebandGeoTiff
-import geotrellis.spark.SpatialKey
+import geotrellis.spark.{LayerId, SpatialKey}
+import geotrellis.spark.io.s3.S3ValueReader
 import geotrellis.vector.io.json.{GeoJson, JsonFeatureCollection}
 import scala.collection.immutable.Map
 import spray.json._
@@ -26,7 +27,7 @@ object Segments {
    val partitions = line.points.sliding(vertexCountPerLine)
    partitions.map(points => Line(points)).toList
  }
-}
+}9
 
 
 
@@ -69,9 +70,13 @@ class ElevationCalculation(vectorTileUrl: String, elevationBucket: String, eleva
 
 object ElevationCalculation {
 
+  val s3Reader = S3ValueReader("osm-elevation", "catalog")
+  val vectorTileReader = new HttpSlippyTileReader[String]((key,arr) => arr.map("%02x".format(_)).mkString)
+
   def apply(zoom: Int, polygon: Polygon): Seq[LineFeature[Stats]] = {
 
     val spatialKeys: Seq[SpatialKey] = DecomposePolygonTms(zoom, polygon)
+    val valueReader = s3Reader.reader[SpatialKey, Tile](LayerId("ned", zoom))
 
 
 

@@ -1,7 +1,9 @@
 package geotrellis.osme.core
 
 import geotrellis.proj4.WebMercator
-import geotrellis.spark.SpatialKey
+import geotrellis.raster.{GridBounds, Tile}
+import geotrellis.spark.{LayerId, SpatialKey}
+import geotrellis.spark.io.s3.S3ValueReader
 import geotrellis.spark.tiling.{MapKeyTransform, LayoutDefinition, ZoomedLayoutScheme}
 import geotrellis.vector.Polygon
 
@@ -14,7 +16,8 @@ object DecomposePolygonTms {
       val scheme  = ZoomedLayoutScheme(WebMercator)
       val layout: LayoutDefinition = scheme.levelForZoom(zoom).layout
       val transform: MapKeyTransform = layout.mapTransform
-
+      val extent = layout.extent
+      val bounds: GridBounds = transform(extent)
 
     }
 }
