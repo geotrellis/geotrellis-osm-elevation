@@ -159,9 +159,7 @@ var actions = {
   },
   
   queryRoadElevation: function(serviceUrl, polygonJSON, map) {
-    return dispatch => {
-      console.log("MAP", map);
-      
+    return dispatch => {      
       return fetch(serviceUrl, {
         method: 'POST',
         headers: {
@@ -173,7 +171,6 @@ var actions = {
       .then(
          response => {
            response.json().then( lines => {
-             //console.log(lines);
              dispatch(actions.renderElevation(lines, map));
            });
          },
@@ -181,11 +178,12 @@ var actions = {
       )
     }
   },
-  renderElevation: function(lines, map){
+  renderElevation: function(lines, map, intervals){
       return {
         type: 'SHOW_ELEVATIONS',
         elevation: lines,
-        theMap: map
+        theMap: map,
+        elevationRanges: intervals,
       }
   }
 };

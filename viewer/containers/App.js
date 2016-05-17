@@ -11,7 +11,7 @@ import _ from 'lodash';
 import "bootstrap-webpack";
 
 var App = React.createClass({
-
+    
   render: function() {
     return (
     <div className="row">
@@ -19,7 +19,9 @@ var App = React.createClass({
           <Leaflet
             queryPolygon={this.props.actions.queryRoadElevation}
             url={this.props.map.url}
-            bounds={this.props.map.bounds} />
+            bounds={this.props.map.bounds} 
+            oldIntervals={this.props.actions.elevationRanges}
+            />
         </div>
 
         <div className="col-md-3" >
@@ -28,13 +30,6 @@ var App = React.createClass({
               defaultUrl={this.props.rootUrl}
               bounds={this.props.map.bounds}
               onSubmit={url => this.props.actions.fetchCatalog(url)} />        
-              
-            <MapViews
-              rootUrl={this.props.rootUrl}
-              layers={this.props.catalog.layers }
-              showExtent={this.props.actions.showExtent}
-              showLayer={this.props.actions.showLayer}
-              showLayerWithBreaks={this.props.actions.showLayerWithBreaks} />
           </div>
         </div>
       </div>
@@ -61,6 +56,14 @@ var App = React.createClass({
       hideMaxAverageState={this.props.actions.hideMaxAverageState}
       showStateAverage={this.props.actions.showStateAverage}
       showStateDiffAverage={this.props.actions.showStateDiffAverage} />
+      
+                    
+            <MapViews
+              rootUrl={this.props.rootUrl}
+              layers={this.props.catalog.layers }
+              showExtent={this.props.actions.showExtent}
+              showLayer={this.props.actions.showLayer}
+              showLayerWithBreaks={this.props.actions.showLayerWithBreaks} />
 */
 
 var mapStateToProps = function (state) {
