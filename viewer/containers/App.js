@@ -23,48 +23,10 @@ var App = React.createClass({
             oldIntervals={this.props.actions.elevationRanges}
             />
         </div>
-
-        <div className="col-md-3" >
-          <div style={{"paddingRight": "10px", "paddingTop": "10px"}}>
-            <Catalog
-              defaultUrl={this.props.rootUrl}
-              bounds={this.props.map.bounds}
-              onSubmit={url => this.props.actions.fetchCatalog(url)} />        
-          </div>
-        </div>
       </div>
     );
   }
 });
-
-/*
-      maxState={this.props.map.maxState}
-      maxAverageState={this.props.map.maxAverageState}
-      stateAverage={this.props.map.stateAverage}
-      stateDiffAverage={this.props.map.stateDiffAverage}
-
-      <Panels
-      rootUrl={this.props.rootUrl}
-      layers={this.props.catalog.layers}
-      activeLayerId={this.props.map.activeLayerId}
-      showExtent={this.props.actions.showExtent}
-      showLayer={this.props.actions.showLayer}
-      showLayerWithBreaks={this.props.actions.showLayerWithBreaks}
-      showMaxState={this.props.actions.showMaxState}
-      hideMaxState={this.props.actions.hideMaxState}
-      showMaxAverageState={this.props.actions.showMaxAverageState}
-      hideMaxAverageState={this.props.actions.hideMaxAverageState}
-      showStateAverage={this.props.actions.showStateAverage}
-      showStateDiffAverage={this.props.actions.showStateDiffAverage} />
-      
-                    
-            <MapViews
-              rootUrl={this.props.rootUrl}
-              layers={this.props.catalog.layers }
-              showExtent={this.props.actions.showExtent}
-              showLayer={this.props.actions.showLayer}
-              showLayerWithBreaks={this.props.actions.showLayerWithBreaks} />
-*/
 
 var mapStateToProps = function (state) {
   return state;
