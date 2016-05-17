@@ -182,8 +182,7 @@ var actions = {
       return {
         type: 'SHOW_ELEVATIONS',
         elevation: lines,
-        theMap: map,
-        elevationRanges: intervals,
+        theMap: map
       }
   }
 };
