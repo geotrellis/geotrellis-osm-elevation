@@ -3,9 +3,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from '../redux/actions';
 import Leaflet from '../components/Leaflet';
-import Catalog from '../components/Catalog';
-import Panels from '../components/Panels';
-import MapViews from '../components/MapViews';
 import _ from 'lodash';
 
 import "bootstrap-webpack";
