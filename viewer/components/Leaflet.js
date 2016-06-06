@@ -11,9 +11,11 @@ var Leaflet = React.createClass({
   _onCreate: function(e) {
         
       var map = e.layer._map;
+      
       // get polygon geojson from e.
       var polygonJSON = e.layer.toGeoJSON();
       var serviceURL = "http://localhost:8088/getVectorData";
+    
       this.props.queryPolygon(serviceURL, polygonJSON.geometry, map);
                                           
       console.log("onCreate");

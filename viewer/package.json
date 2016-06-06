@@ -34,6 +34,7 @@
     "react-leaflet": "^0.9.0",
     "react-leaflet-draw": "^0.5.0",
     "react-redux": "^4.0.0",
+    "react-timeout": "^1.0.0",
     "react-transform-hmr": "^1.0.1",
     "redux": "^3.0.4",
     "redux-logger": "^2.0.4",
